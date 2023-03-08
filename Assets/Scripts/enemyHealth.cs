@@ -12,7 +12,11 @@ public class enemyHealth : MonoBehaviour
     public Slider enemyHealthSlider;
 
     Color orange = new Color(255f, 100f, 0f, 1);
-
+    public AudioClip enemyDeadSFX;
+    public AudioClip enemyHurtSFX;
+    public bool drops;
+    public int dropsOutOff;
+    public GameObject theDrop;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +29,7 @@ public class enemyHealth : MonoBehaviour
 
     public void TakeDamage (int damage)
     {
+        AudioSource.PlayClipAtPoint(enemyHurtSFX, transform.position);
         enemyHealthSlider.gameObject.SetActive(true);
 
         enemyCurrentHealth -= damage;
@@ -38,8 +43,18 @@ public class enemyHealth : MonoBehaviour
 
     private void enemyDead()
     {
-        Instantiate(enemyDeadFX, transform.position, transform.rotation);
+
+        AudioSource.PlayClipAtPoint(enemyDeadSFX, transform.position);
         Destroy(gameObject);
+        Instantiate(enemyDeadFX, transform.position, transform.rotation);
+
+        if (drops) { 
+            int rngDrop = UnityEngine.Random.Range(0, dropsOutOff);
+            if (rngDrop == 0)
+            {
+                Instantiate(theDrop, transform.position, transform.rotation);
+            }
+        }
     }
 
     // Update is called once per frame

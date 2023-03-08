@@ -27,41 +27,52 @@ public class redKoopaWalkPlatform : MonoBehaviour
         transform.Translate(Vector2.right * enemySpeed * Time.deltaTime);
         RaycastHit2D groundInfo = Physics2D.Raycast(ground.position, Vector2.down, detectionDistance);
         RaycastHit2D wallInfo = Physics2D.Raycast(wall.position, Vector2.right, detectionDistance);
-        if (groundInfo.collider == false && wallInfo.collider == false)
+        try
         {
-            if (movingRight == true)
+
+
+            if (groundInfo.collider == false && wallInfo.collider == false || (groundInfo.collider.tag == "Trigger" || wallInfo.collider.tag == "Trigger"))
             {
-                transform.eulerAngles = new Vector3(0f, -180, 0);
+                if (movingRight == true)
+                {
+                    transform.eulerAngles = new Vector3(0f, -180, 0);
 
-                movingRight = false;
+                    movingRight = false;
 
+                }
+                else
+                {
+
+                    transform.eulerAngles = new Vector3(0f, 0, 0);
+
+
+                    movingRight = true;
+                }
             }
-            else
+            if (groundInfo.collider == true && wallInfo.collider == true /*&& groundInfo.collider.tag == "Trigger" || wallInfo.collider.tag == "Trigger"*/)
             {
+                if (movingRight == true)
+                {
+                    transform.eulerAngles = new Vector3(0f, -180, 0);
 
-                transform.eulerAngles = new Vector3(0f, 0, 0);
+                    movingRight = false;
+
+                }
+                else
+                {
+
+                    transform.eulerAngles = new Vector3(0f, 0, 0);
 
 
-                movingRight = true;
+                    movingRight = true;
+                }
             }
         }
-        if (groundInfo.collider == true && wallInfo.collider == true){
-            if (movingRight == true)
-            {
-                transform.eulerAngles = new Vector3(0f, -180, 0);
+        catch
+        {
 
-                movingRight = false;
-
-            }
-            else
-            {
-
-                transform.eulerAngles = new Vector3(0f, 0, 0);
-
-
-                movingRight = true;
-            }
         }
+        
     }
 
  

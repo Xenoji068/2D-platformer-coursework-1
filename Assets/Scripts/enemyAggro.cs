@@ -51,7 +51,7 @@ public class enemyAggro : MonoBehaviour
 
     private void DontChasePlayer()
     {
-       enemyRB.velocity = new Vector2(0,0 );
+       enemyRB.velocity = new Vector2(0, enemyRB.velocity.y);
     }
 
     private void ChasePlayer()
@@ -59,13 +59,13 @@ public class enemyAggro : MonoBehaviour
         if (transform.position.x < player.position.x)
         {//if we are on the left, move right
 
-            enemyRB.velocity = new Vector2(enemySpeed, 0);
+            enemyRB.velocity = new Vector2(enemySpeed, enemyRB.velocity.y);
             transform.localScale = new Vector2(1, 1);
         }
         else if (transform.position.x > player.position.x)
         {//if we are on the right,move left
 
-            enemyRB.velocity = new Vector2(-enemySpeed, 0);
+            enemyRB.velocity = new Vector2(-enemySpeed, enemyRB.velocity.y);
             transform.localScale = new Vector2(-1, 1);
 
         }

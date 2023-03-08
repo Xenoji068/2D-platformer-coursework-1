@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class fireballUnlock : MonoBehaviour
 {
-    
+    public AudioClip unlockSFX;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +16,8 @@ public class fireballUnlock : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             Shoot.unlocked = true;
+            AudioSource.PlayClipAtPoint(unlockSFX, transform.position);
+
             Destroy(gameObject);
         }
         

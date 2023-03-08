@@ -38,7 +38,7 @@ public class enemyDamage : MonoBehaviour
 
     private void knockBack(Transform pushedObject)
     {
-        Vector2 knockBack = new Vector2(pushedObject.position.x - transform.position.x, (pushedObject.position.y - transform.position.y)).normalized;
+        Vector2 knockBack = new Vector2(pushedObject.position.x + transform.position.x, (pushedObject.position.y -  transform.position.y));
         knockBack *= knockBackMaginitude;
         Rigidbody2D knockBackRB = pushedObject.gameObject.GetComponent<Rigidbody2D>();
         knockBackRB.velocity = Vector2.zero;

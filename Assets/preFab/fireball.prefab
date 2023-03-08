@@ -49,7 +49,6 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -134,8 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f59c2bc41d53c418a7f39b01d5fca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponDamage: 10
+  weaponDamage: 25
   projectileSpeed: 20
+  fireBallSFX: {fileID: 8300000, guid: e11a5a019377fbd4c81caa0adcb4c236, type: 3}
   shootableLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -152,4 +152,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afac7f451ed5fbd4693420d089fd0bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeAlive: 1.2
+  timeAlive: 0.6

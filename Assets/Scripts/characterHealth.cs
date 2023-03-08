@@ -6,29 +6,43 @@ using UnityEngine.UI;
 
 public class characterHealth : MonoBehaviour
 {
-    public float fullHealth;
-
-    float currentHealth;
+    public static float fullHealth = 100;
 
 
-    //public GameObject deadFX; 
+   public static  float currentHealth = fullHealth;
+    public Image damageScreen;
+    bool damaged = false;
+    Color damagedColour = new Color(255f, 0f, 0f, 0.5f);
+    float smoothColour = 5f;
+    //lives 
+    public static int lives = 2;
 
+    public GameObject deadFX;
+   public AudioClip respawnSFX;
     //HUD variables;
     public Slider healthSlider;
-    public Slider staminaSlider;
+   public Slider staminaSlider;
 
     characterController controlMovement;
 
+    //gameover screen
+   public AudioClip gameOverSFX;
+   public AudioClip hurtSFX;
+
+    public Text gameOverScreen;
+    //WIN GAME SCREEN
+    public Text youWonScreen;
+    public AudioClip youWinSFX;
+    //restart
+    public restartGame theGameManager;
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = fullHealth;
-
         controlMovement = GetComponent<characterController>();
 
         //HUD initialiser
         healthSlider.maxValue = fullHealth;
-        healthSlider.value = fullHealth;
+        healthSlider.value = currentHealth;
 
         staminaSlider.maxValue = 1;
        
@@ -38,14 +52,25 @@ public class characterHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time > controlMovement.nextFireTime)
+        if (damaged)
         {
-            staminaSlider.value = 1;
-        }
-        else
+            damageScreen.color = damagedColour;
+        }else
         {
-            staminaSlider.value = 0;
+            damageScreen.color = Color.Lerp(damageScreen.color, Color.clear, smoothColour * Time.deltaTime);
         }
+        damaged = false;
+
+
+
+
+        if (currentHealth > (fullHealth / 2))
+        {
+            healthSlider.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = Color.green;
+
+        }
+
+  
 
         if (currentHealth <= (fullHealth / 2))
         {
@@ -56,26 +81,82 @@ public class characterHealth : MonoBehaviour
         {
             healthSlider.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = Color.red;
         }
+
+        if (Teleport.unlocked == true) 
+        { 
+            if (Time.time > controlMovement.nextFireTime)
+            {
+                staminaSlider.value = 1;
+            }
+            else
+            {
+                staminaSlider.value = 0;
+            }
+        }
+        
+
     }
     public void addDamage(float damage)
     {
-        if(damage<= 0)
+        if (damage <= 0)
         {
             return;
         }
-        currentHealth -= damage;
-        healthSlider.value = currentHealth;
-
-
-        if (currentHealth <= 0)
-        {
+      /**/  else {
+            AudioSource.PlayClipAtPoint(hurtSFX, transform.position);
+            currentHealth -= damage;
+            healthSlider.value = currentHealth;
+            damaged = true; 
+        }
+        if ((currentHealth <= 0) && lives ==0)
+        { 
             makeDead();
+           
+           
+        }
+
+        //for respawn
+        else if ((currentHealth <= 0) && lives >= 1)
+        {
+
+            lives -= 1;
+            print(lives + "lives remaining");
+            currentHealth = fullHealth / 2;
+            healthSlider.value = currentHealth;
+            AudioSource.PlayClipAtPoint(respawnSFX, transform.position);
+            characterController.respawn();
         }
     }
-
-    private void makeDead()
+    public void addHealth(float healthValue)
     {
-        //Instantiate(deadFX, m.position, transform.rotation)
+        currentHealth += healthValue;
+        
+        if (currentHealth > fullHealth)
+        {
+            currentHealth = fullHealth;
+        }    
+        healthSlider.value = currentHealth;       
+        
+        
+    }
+    public void makeDead()
+    {
+        Instantiate(deadFX, transform.position, transform.rotation);
+        AudioSource.PlayClipAtPoint(gameOverSFX, transform.position);
         Destroy(gameObject);
+        damageScreen.color = damagedColour;
+        Animator gameOverAnimator = gameOverScreen.GetComponent<Animator>();
+        gameOverAnimator.SetTrigger("gameOver");
+        theGameManager.resartGame();
+        print("G-O");
+    }
+
+    public void winGame()
+    {
+        AudioSource.PlayClipAtPoint(youWinSFX, transform.position);
+        Destroy(gameObject);
+        Animator youWinAnimator = youWonScreen.GetComponent<Animator>();
+        youWinAnimator.SetTrigger("gameOver");
+        theGameManager.resartGame();
     }
 }

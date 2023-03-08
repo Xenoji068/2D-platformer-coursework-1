@@ -8,6 +8,7 @@ public class projectileFiring : MonoBehaviour
 
 
     public float projectileSpeed = 20f;
+    public AudioClip fireBallSFX;
 
 
     public LayerMask shootableLayer;
@@ -16,6 +17,8 @@ public class projectileFiring : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AudioSource.PlayClipAtPoint(fireBallSFX, transform.position);
+
         if (transform.localRotation.z < 0)
         {
             projectileRB.velocity = transform.right * -projectileSpeed;
@@ -28,24 +31,27 @@ public class projectileFiring : MonoBehaviour
 
     }
 
-    // Update is called once per frame
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
-        enemyHealth enemy = collision.GetComponent<enemyHealth>();
-        BigSlimeDead bigEnemy = collision.GetComponent<BigSlimeDead>();
+      if(collision.gameObject.layer == LayerMask.NameToLayer("Shootable"))
         {
-            if (enemy != null)
-            {
-                enemy.TakeDamage(weaponDamage);
 
-            }
-            else if(bigEnemy != null)
-            {
-                bigEnemy.TakeDamage(weaponDamage);
-            }
+                    enemyHealth enemy = collision.GetComponent<enemyHealth>();
+                    BigSlimeDead bigEnemy = collision.GetComponent<BigSlimeDead>();
+                    {
+                        if (enemy != null)
+                        {
+                            enemy.TakeDamage(weaponDamage);
+
+                        }
+                        else if(bigEnemy != null)
+                        {
+                            bigEnemy.TakeDamage(weaponDamage);
+                        }
+                    }
+                    Destroy(gameObject);
         }
-        Destroy(gameObject);
+       
     }
 }

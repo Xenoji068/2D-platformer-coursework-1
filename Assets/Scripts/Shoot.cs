@@ -5,38 +5,78 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
-    bool isFire;
-    bool isIce;
-    bool isLightning;
+    
+    
 
     public GameObject projectile;
-    public Transform firePoint;
+    public GameObject projectile2;
 
+    public Transform firePoint;
     static public bool unlocked = false;
+
+
+    //cooldown
+    float timeStamp;
+    [SerializeField] float coolDownPeriodInSeconds;
     // Start is called before the first frame update
     void Start()
     {
 
     }
-
     // Update is called once per frame
     void Update()
     {
         if (unlocked)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (collect.coinCount < 6) 
             {
-                fire();
+
+                if (timeStamp <= Time.time)
+                {
+
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+
+                        fire();
+                        timeStamp = Time.time + 1;
+
+                    }
+                }
             }
+
+            if(collect.coinCount >= 6)
+            {
+                if (timeStamp <= Time.time)
+                {
+
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+
+
+                        Darkfire();
+                        timeStamp = Time.time + 0.5f;
+
+                    }
+                }
+            }
+
         }
         
 
 
     }
 
-    private void fire()
+    private void Darkfire()
     {
-        Instantiate(projectile, firePoint.position, firePoint.rotation);
+        Instantiate(projectile2, firePoint.position, firePoint.rotation);
+    }
+
+    private void fire()
+    {                    
+
+        
+            Instantiate(projectile, firePoint.position, firePoint.rotation);
+        
     }
 }
  

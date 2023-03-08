@@ -21,7 +21,7 @@ public class countdownController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time > nextFireTime)
+       /* if(Time.time > nextFireTime)
         {
 
         
@@ -32,6 +32,6 @@ public class countdownController : MonoBehaviour
                 nextFireTime = Time.time + cooldownTime;
 
             }
-        }
+        }*/
     }
 }

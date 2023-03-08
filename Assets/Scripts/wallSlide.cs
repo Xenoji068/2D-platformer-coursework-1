@@ -12,7 +12,9 @@ public class wallSlide : MonoBehaviour
     public float slideSpeed = 4f;
     characterController controlMovement;
     Rigidbody2D charRB; //reference to the characters rigidbody2d component
+    public GameObject wallDustFX;
 
+    public AudioClip WJSFX;
 
     //Wall Jump
     bool wallJumping;
@@ -66,8 +68,9 @@ public class wallSlide : MonoBehaviour
         if (unlocked)
         {
             //wall jumping
-            if (Input.GetKeyDown("space") && (touchingRight || touchingLeft) && !controlMovement.grounded)
+            if (Input.GetKeyDown("space") && (touchingRight || touchingLeft) && !controlMovement.grounded )
             {
+                AudioSource.PlayClipAtPoint(WJSFX, transform.position);
                 wallJumping = true;
                 Invoke("wallJumpToFalse", 0.2f);
             }
@@ -76,7 +79,7 @@ public class wallSlide : MonoBehaviour
             {
                 charRB.velocity = new Vector2( (controlMovement.maxCharacterSpeed * touchingLeftOrRight)  , controlMovement.jumpSpeed);
              }
-
+          
         }
     }
 
@@ -95,7 +98,13 @@ public class wallSlide : MonoBehaviour
 
     void WallSlide()
     {
-        charRB.velocity = new Vector2(charRB.velocity.x, -slideSpeed);
+        if (!(touchingLeft && touchingRight))
+        {
+            Instantiate(wallDustFX,new  Vector3(charRB.position.x, charRB.position.y,1), charRB.transform.rotation);
+        }
+
+
+        charRB.velocity = new Vector2(charRB.velocity.x, -slideSpeed*2);
     }
 
     void wallJumpToFalse()

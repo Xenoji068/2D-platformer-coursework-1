@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class powerUp : MonoBehaviour
 {
-    
+    public AudioClip unlockSFX;
+
     // Start is called before the first frame update
- 
+
 
     void activate()
     {
@@ -17,6 +18,8 @@ public class powerUp : MonoBehaviour
         if(collision.tag == "Player")
         {
             activate();
+            AudioSource.PlayClipAtPoint(unlockSFX, transform.position);
+
             Destroy(gameObject);
         }
        

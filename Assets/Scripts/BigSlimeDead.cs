@@ -15,7 +15,9 @@ public class BigSlimeDead : MonoBehaviour
 
     public Transform slimeSpawnL;
     public Transform slimeSpawnR;
+    public AudioClip enemyHurtSFX;
 
+    public AudioClip enemyDeadSFX;
     Color orange = new Color(255f, 100f, 0f, 1);
 
     // Start is called before the first frame update
@@ -30,6 +32,7 @@ public class BigSlimeDead : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        AudioSource.PlayClipAtPoint(enemyHurtSFX, transform.position);
         enemyHealthSlider.gameObject.SetActive(true);
 
         enemyCurrentHealth -= damage;
@@ -43,6 +46,7 @@ public class BigSlimeDead : MonoBehaviour
 
     private void enemyDead()
     {
+        AudioSource.PlayClipAtPoint(enemyDeadSFX, transform.position);
         Instantiate(enemyDeadFX, transform.position, transform.rotation);
 
         Instantiate(spawnSlime, slimeSpawnL.position, slimeSpawnL.rotation);

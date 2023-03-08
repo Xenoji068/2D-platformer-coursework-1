@@ -8,7 +8,7 @@ public class Teleport : MonoBehaviour
 
     //Dash
     public float dashForce;
-
+    int dashBinary;
     public float startDashTime;
     float CurrentDashTime;
     float dashDirection;
@@ -19,11 +19,13 @@ public class Teleport : MonoBehaviour
     public GameObject TeleportFX;
     characterController characterMove;
     public static bool unlocked =false;
+    public AudioClip TPsound;
     // Start is called before the first frame update
     void Start()
     {
         charRB = GetComponent<Rigidbody2D>();
         characterMove = GetComponent<characterController>();
+
     }
 
     // Update is called once per frame
@@ -38,16 +40,25 @@ public class Teleport : MonoBehaviour
                 {
                     Instantiate(TeleportFX, transform.position, transform.rotation);
 
-                    //print("umm");
+                    print("umm");
                     isDashing = true;
                     CurrentDashTime = startDashTime;
                     charRB.velocity = Vector2.zero;
                     dashDirection = (int)characterMove.move;
+                    if(characterController.facingRight)
+                    {
+                         dashBinary = 1;
+                    }
+                    if(!characterController.facingRight)
+                    {
+                         dashBinary = -1;
+                    }
                 }
                 if (isDashing)
                 {
+                    AudioSource.PlayClipAtPoint(TPsound, transform.position);
                     Instantiate(TeleportFX, transform.position, transform.rotation);
-                    charRB.transform.position = new Vector2(charRB.transform.position.x + dashForce * dashDirection, charRB.transform.position.y); //move in the x axis by move(above value) * max speed. 
+                    charRB.transform.position = new Vector2(charRB.transform.position.x + dashForce * dashBinary/*make 1 or -1*/, charRB.transform.position.y); //move in the x axis by move(above value) * max speed. 
 
 
                     CurrentDashTime -= Time.time + CurrentDashTime;
